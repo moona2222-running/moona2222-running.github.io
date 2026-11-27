@@ -371,10 +371,10 @@
   function dayStatus(day, today) {
     var rec = state.byDate[day.date];
     var dt = d(day.date);
-    if (dt > today) return { key: "future", label: "예정" };
     if (day.type === "rest") {
       return rec && rec.km > 0 ? { key: "extra", label: "휴식일 러닝" } : { key: "rest", label: "휴식" };
     }
+    if (dt > today) return { key: "future", label: "예정" };
     if (!rec) {
       if (fmtLocal(today) === day.date) return { key: "future", label: "예정" };
       return { key: "miss", label: "미실시" };
