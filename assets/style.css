@@ -8,6 +8,11 @@
   --accent-soft: #ffe8db;
   --bar: #fc4c02;
   --bar-soft: #ffcbb0;
+  --ok: #1d9d5b;
+  --warn: #d98324;
+  --bad: #d1503f;
+  --soft: #fbfbfa;
+  --tint: #fff6f1;
   --radius: 16px;
   --shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
 }
@@ -266,6 +271,11 @@ footer.foot a { color: inherit; }
     --line: #2a2e35;
     --accent-soft: #3a1c0c;
     --shadow: none;
+    --ok: #4ecb8b;
+    --warn: #e0a44a;
+    --bad: #f07a68;
+    --soft: #20242a;
+    --tint: #241a15;
   }
   .search, .more { background: #20242a; }
   .more:hover { background: #262b32; }
@@ -273,3 +283,325 @@ footer.foot a { color: inherit; }
   .pill { color: #ffb089; }
   .chip[aria-pressed="true"] { background: #eef0f3; border-color: #eef0f3; color: #14161a; }
 }
+
+/* ================= 서울마라톤 훈련 현황 ================= */
+
+/* 화면 전환 탭 */
+.tabs {
+  position: sticky;
+  top: 8px;
+  z-index: 6;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 0 0 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+.tab {
+  flex: 1 1 0;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: .84rem;
+  font-weight: 700;
+  padding: 11px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.tab:hover { background: #f2f2ef; }
+.tab[aria-selected="true"] { background: var(--accent); color: #fff; }
+.tab[aria-selected="true"]:hover { background: var(--accent); }
+
+/* 요약 카드 */
+.plan-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.pcard {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.pcard .label { font-size: .76rem; color: var(--muted); font-weight: 600; letter-spacing: .01em; }
+.pcard .value {
+  margin-top: 6px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+.pcard .value small { font-size: .8rem; font-weight: 600; color: var(--muted); margin-left: 1px; }
+.pcard .hint { margin-top: 7px; font-size: .76rem; color: var(--muted); line-height: 1.45; }
+.pcard.wide { grid-column: span 2; }
+.pcard.full { grid-column: span 2; }
+@media (min-width: 720px) {
+  .plan-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pcard.wide { grid-column: span 1; }
+  .pcard.full { grid-column: span 4; }
+}
+
+/* 진행 바 */
+.bar {
+  display: block;
+  margin-top: 10px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+}
+.bar > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: var(--accent);
+  transition: width .5s ease;
+}
+.bar[data-state="ok"] > i { background: var(--ok); }
+.bar[data-state="warn"] > i { background: var(--warn); }
+.bar[data-state="bad"] > i { background: var(--bad); }
+
+/* 오늘의 훈련 */
+.pcard.today { gap: 0; }
+.today-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.today-date { font-weight: 500; color: var(--muted); }
+.t-title { margin-top: 4px; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+.t-meta { margin-top: 7px; font-size: .82rem; font-variant-numeric: tabular-nums; }
+.t-meta .sep { color: var(--line); margin: 0 7px; }
+.t-detail { margin-top: 6px; font-size: .78rem; color: var(--muted); line-height: 1.6; }
+
+/* 페이스 존 */
+.zones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding-bottom: 12px;
+}
+@media (min-width: 640px) { .zones { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.zone {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 11px;
+  background: var(--soft);
+}
+.zone .zlabel { font-size: .72rem; color: var(--muted); font-weight: 600; }
+.zone .zpace {
+  margin-top: 2px;
+  font-size: .9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* 주차 목록 */
+.weeks { display: flex; flex-direction: column; }
+.week { border-top: 1px solid var(--line); }
+.week:first-child { border-top: 0; }
+.week > summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto 12px;
+  gap: 4px 10px;
+  align-items: center;
+  padding: 13px 2px;
+}
+.week > summary::-webkit-details-marker { display: none; }
+.week > summary:hover .wtitle { color: var(--accent); }
+.week[open] > summary { padding-bottom: 8px; }
+.week.cur > summary { background: var(--tint); border-radius: 12px; padding-left: 8px; padding-right: 8px; }
+.week.cur { border-top-color: transparent; }
+
+.wbadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: #b33a00;
+  font-size: .9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.wbadge small { font-size: .54rem; font-weight: 700; margin-top: 2px; opacity: .85; }
+.week.cur .wbadge { background: var(--accent); color: #fff; }
+.week.cur .wbadge small { opacity: .9; }
+
+.wmain { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.wtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: color .15s;
+}
+.wmeta {
+  display: flex;
+  align-items: center;
+  gap: 4px 7px;
+  flex-wrap: wrap;
+  font-size: .74rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.wmeta .dotsep { opacity: .5; }
+.week .bar { margin-top: 4px; height: 6px; }
+.wkm {
+  font-size: .92rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.wkm small { display: block; font-size: .7rem; font-weight: 600; color: var(--muted); margin-top: 1px; }
+.chev { color: var(--muted); font-size: .8rem; transition: transform .15s; justify-self: center; }
+.week[open] .chev { transform: rotate(90deg); }
+
+/* 단계 배지 */
+.phase {
+  display: inline-block;
+  font-size: .64rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 1px 6px;
+  letter-spacing: 0;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+.p-base { background: #eef2ff; color: #3b5bdb; }
+.p-recovery { background: #e6f6ee; color: #1f7a4d; }
+.p-build { background: #fff4e0; color: #a15c00; }
+.p-peak { background: #ffe8db; color: #b33a00; }
+.p-taper { background: #f1ecff; color: #5b3ec8; }
+.p-race { background: #ffe1dd; color: #c0392b; }
+
+/* 요일별 계획 vs 실제 */
+.days { padding: 2px 0 12px; }
+.day {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 0 10px;
+  padding: 10px 6px;
+  border-top: 1px dashed var(--line);
+  border-radius: 10px;
+}
+.days .day:first-child { border-top: 0; }
+.day.today { background: var(--tint); border-top-color: transparent; }
+.day .dow {
+  font-size: .68rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+.day .dow b { display: block; font-size: .86rem; color: var(--ink); font-weight: 700; }
+.day.sat .dow b { color: #2563eb; }
+.day.sun .dow b { color: var(--bad); }
+.day .dl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.day .dt { font-size: .86rem; font-weight: 700; letter-spacing: -0.01em; }
+.day .dm { margin-top: 2px; font-size: .74rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.day .da { margin-top: 2px; font-size: .76rem; font-variant-numeric: tabular-nums; }
+.day .dd { margin-top: 4px; font-size: .72rem; color: var(--muted); line-height: 1.55; }
+.day.rest .dt { color: var(--muted); font-weight: 600; }
+
+/* 상태 배지 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .66rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  background: #f2f2ef;
+  color: var(--muted);
+}
+.badge.ok { background: #e6f6ee; color: #1f7a4d; }
+.badge.partial { background: #fff4e0; color: #a15c00; }
+.badge.short, .badge.miss { background: #fdeceb; color: #c0392b; }
+.badge.extra { background: #eaf2ff; color: #2559a8; }
+.day.ok .da { color: #1f7a4d; font-weight: 600; }
+.day.miss .da, .day.short .da { color: #c0392b; }
+
+.ptag {
+  display: inline-block;
+  font-size: .64rem;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 1px 5px;
+  margin-left: 6px;
+  background: #f2f2ef;
+  color: var(--muted);
+}
+.ptag.fit { background: #e6f6ee; color: #1f7a4d; }
+.ptag.fast { background: #eaf2ff; color: #2559a8; }
+.ptag.slow { background: #fff4e0; color: #a15c00; }
+
+/* 다크 모드 */
+@media (prefers-color-scheme: dark) {
+  .tab:hover { background: #232830; }
+  .week.cur > summary { background: var(--tint); }
+  .week > summary:hover .wtitle { color: var(--accent); }
+  .wbadge { color: #ffb089; }
+  .week.cur .wbadge { color: #fff; }
+  .p-base { background: #1b2340; color: #9db0ff; }
+  .p-recovery { background: #10311f; color: #7fe0a8; }
+  .p-build { background: #33240d; color: #f0c07a; }
+  .p-peak { background: #3a1c0c; color: #ffb089; }
+  .p-taper { background: #251c40; color: #bcabff; }
+  .p-race { background: #3a1a17; color: #ff9c8c; }
+  .badge { background: #262b32; }
+  .badge.ok { background: #10311f; color: #7fe0a8; }
+  .badge.partial { background: #33240d; color: #f0c07a; }
+  .badge.short, .badge.miss { background: #3a1a17; color: #ff9c8c; }
+  .badge.extra { background: #1a2740; color: #9dc0ff; }
+  .day.ok .da { color: #7fe0a8; }
+  .day.miss .da, .day.short .da { color: #ff9c8c; }
+  .ptag { background: #262b32; }
+  .ptag.fit { background: #10311f; color: #7fe0a8; }
+  .ptag.fast { background: #1a2740; color: #9dc0ff; }
+  .ptag.slow { background: #33240d; color: #f0c07a; }
+}
+
+@media (max-width: 420px) {
+  .wtitle { font-size: .86rem; }
+  .wkm { font-size: .86rem; }
+  .pcard .value { font-size: 1.34rem; }
+}
+
+/* hidden 속성이 레이아웃 클래스에 덮이지 않도록 */
+[hidden] { display: none !important; }
+
+/* 주차 포커스 문구 */
+.wfocus {
+  padding: 0 6px 8px 44px;
+  font-size: .74rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+@media (max-width: 420px) { .wfocus { padding-left: 6px; } }
