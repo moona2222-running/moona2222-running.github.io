@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>러닝 대시보드 · 문규</title>
+<meta name="description" content="Strava에 기록된 러닝 기록을 모아 보는 개인 대시보드 — 누적 거리, 월별·주별 추이, 전체 기록.">
+<meta name="theme-color" content="#fc4c02" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23fc4c02'/%3E%3Cpath d='M58 18 32 58h14l-6 24 28-42H54l4-22z' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>달리는 기록<span class="dot">.</span></h1>
+      <p class="sub" id="updated">Strava 연동 데이터</p>
+    </div>
+    <span class="pill">🏃 러닝 대시보드</span>
+  </header>
+
+  <section class="cards" aria-label="요약">
+    <div class="card">
+      <div class="label">누적 거리</div>
+      <div class="value" id="v-dist">–</div>
+      <div class="hint">Run + 트레일 런</div>
+    </div>
+    <div class="card">
+      <div class="label">러닝 횟수</div>
+      <div class="value" id="v-count">–</div>
+      <div class="hint">2023.09 ~ 현재</div>
+    </div>
+    <div class="card">
+      <div class="label">평균 페이스</div>
+      <div class="value" id="v-pace">–</div>
+      <div class="hint" id="h-pace">누적 시간 기준</div>
+    </div>
+    <div class="card">
+      <div class="label">최근 러닝</div>
+      <div class="value" id="v-last">–</div>
+      <div class="hint" id="h-last">–</div>
+    </div>
+  </section>
+
+  <section class="cards" aria-label="추가 요약">
+    <div class="card">
+      <div class="label">누적 상승 고도</div>
+      <div class="value" id="v-elev">–</div>
+      <div class="hint" id="h-elev">–</div>
+    </div>
+    <div class="card">
+      <div class="label">누적 시간</div>
+      <div class="value" id="v-hours">–</div>
+      <div class="hint" id="h-hours">–</div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-monthly">
+    <h2 id="h-monthly">월별 거리 추이</h2>
+    <p class="cap">최근 24개월 · 단위 km</p>
+    <div class="chart-scroll" id="chart-monthly"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-weekly">
+    <h2 id="h-weekly">주별 거리</h2>
+    <p class="cap">최근 16주 (월요일 시작) · 단위 km</p>
+    <div class="chart-scroll" id="chart-weekly"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-list">
+    <div class="list-head">
+      <h2 id="h-list">러닝 기록</h2>
+      <label class="search" aria-label="기록 검색">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <input id="q" type="search" placeholder="제목·날짜 검색" autocomplete="off">
+      </label>
+    </div>
+    <p class="count" id="period-summary"></p>
+    <div class="chips" id="chips" role="group" aria-label="연도 선택"></div>
+    <ol class="runs" id="runs"></ol>
+    <button class="more" id="more" type="button" style="display:none">더 보기</button>
+    <p class="count" id="count"></p>
+  </section>
+
+  <footer class="foot">
+    <p>기록 출처: <a href="https://www.strava.com/" target="_blank" rel="noopener">Strava</a> 개인 활동 로그.
+    각 기록을 누르면 Strava 원본 활동이 열립니다.</p>
+    <p>이 페이지는 GitHub Pages에 배포된 정적 페이지이며, 데이터는 <code>data/runs.json</code>에 있습니다.</p>
+  </footer>
+
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>
