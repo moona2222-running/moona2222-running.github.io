@@ -114,12 +114,12 @@
           '" text-anchor="middle" font-size="9" font-weight="700" fill="' + cssVar("--muted") + '">' +
           Math.round(v) + "</text>");
       }
-      // label: every other month, plus January (with year) and the current month
-      var every = idx % 2 === 0 || idx === vals.length - 1;
+      // label: every other month (not crowding the last bar), plus the current month
+      var every = (idx % 2 === 0 && idx < vals.length - 2) || idx === vals.length - 1;
       if (every) {
         svg.push('<text x="' + (x + w / 2).toFixed(1) + '" y="' + (H - padB + 14) +
           '" text-anchor="middle" font-size="9.5" fill="' + cssVar("--muted") + '">' + keys[idx].label + "</text>");
-        if (keys[idx].label === "1월") {
+        if (keys[idx].label === "1월" || idx === 0) {
           svg.push('<text x="' + (x + w / 2).toFixed(1) + '" y="' + (H - padB + 25) +
             '" text-anchor="middle" font-size="8.5" fill="' + cssVar("--muted") + '">' + keys[idx].year + "</text>");
         }
