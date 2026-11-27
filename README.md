@@ -45,7 +45,8 @@ Strava에 기록된 개인 러닝 로그와 서울마라톤(2027-03-21) Sub 3:20
  "targetKm":8,"targetPace":"5′30″~5′55″/km","paceZone":"easy","detail":"..."}
 ```
 
-생성 스크립트: `../build_plan.py` (주차 합계·날짜 연속성·휴식 요일 검증 후 출력).
+생성 스크립트: `build_plan.py` — 저장소 루트에서 `python3 build_plan.py`를 실행하면
+`data/plan.json`을 다시 씁니다(주차 합계·날짜 연속성·휴식 요일 검증 후 출력).
 
 ## 갱신 방법
 
