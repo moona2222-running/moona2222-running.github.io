@@ -24,6 +24,9 @@
     return m + ":" + String(s).padStart(2, "0");
   }
   function d(iso) { var p = iso.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function fmtLocal(x) {
+    return x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0");
+  }
   function cssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
@@ -130,7 +133,7 @@
     var byWeek = {};
     runs.forEach(function (r) {
       var m = mondayOf(d(r.date));
-      var k = m.toISOString().slice(0, 10);
+      var k = fmtLocal(m);
       byWeek[k] = (byWeek[k] || 0) + r.km;
     });
 
@@ -139,7 +142,7 @@
     for (var i = 15; i >= 0; i--) {
       var wk = new Date(thisMon.getTime());
       wk.setDate(wk.getDate() - i * 7);
-      var k = wk.toISOString().slice(0, 10);
+      var k = fmtLocal(wk);
       keys.push({ key: k, date: wk });
     }
     var vals = keys.map(function (k) { return byWeek[k.key] || 0; });
