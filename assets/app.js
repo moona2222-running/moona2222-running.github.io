@@ -7,7 +7,10 @@
 
   /* ---------- helpers ---------- */
   function km(v) {
-    return v >= 100 ? Math.round(v).toLocaleString("ko-KR") : v.toFixed(1);
+    if (v >= 100) {
+      return v.toLocaleString("ko-KR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    }
+    return v.toFixed(1);
   }
   function n(v) { return v.toLocaleString("ko-KR"); }
   function paceText(sec, distKm) {
@@ -111,9 +114,9 @@
           '" text-anchor="middle" font-size="9" font-weight="700" fill="' + cssVar("--muted") + '">' +
           Math.round(v) + "</text>");
       }
-      // label every month on wide charts, every 2nd on narrow
-      var every = 1;
-      if (keys[idx].label === "1월" || idx === 0 || isCur) {
+      // label: every other month, plus January (with year) and the current month
+      var every = idx % 2 === 0 || idx === vals.length - 1;
+      if (every) {
         svg.push('<text x="' + (x + w / 2).toFixed(1) + '" y="' + (H - padB + 14) +
           '" text-anchor="middle" font-size="9.5" fill="' + cssVar("--muted") + '">' + keys[idx].label + "</text>");
         if (keys[idx].label === "1월") {
@@ -225,7 +228,7 @@
     var parts = ['<button class="chip" data-year="all" aria-pressed="' + (state.year === "all") + '">전체</button>'];
     list.forEach(function (y) {
       parts.push('<button class="chip" data-year="' + y + '" aria-pressed="' + (state.year === y) + '">' +
-        y + " <span style=\"opacity:.55;font-weight:600\">" + km(years[y]) + "km</span></button>");
+        y + " <span style=\"opacity:.55;font-weight:600\">" + Math.round(years[y]).toLocaleString("ko-KR") + "km</span></button>");
     });
     host.innerHTML = parts.join("");
     host.querySelectorAll(".chip").forEach(function (b) {
