@@ -396,6 +396,7 @@ footer.foot a { color: inherit; }
   padding-bottom: 12px;
 }
 @media (min-width: 640px) { .zones { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 820px) { .zones { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .zone {
   border: 1px solid var(--line);
   border-radius: 10px;

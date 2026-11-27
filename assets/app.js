@@ -20,6 +20,9 @@
   function fmtKm(v) {
     return v.toLocaleString("ko-KR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   }
+  function kmLabel(v) {
+    return v % 1 === 0 ? v.toFixed(1) : v.toLocaleString("ko-KR", { maximumFractionDigits: 3 });
+  }
   function n(v) { return v.toLocaleString("ko-KR"); }
   function paceText(sec, distKm) {
     if (!distKm || !sec) return "—";
@@ -404,7 +407,7 @@
 
     var planTxt = day.type === "rest"
       ? "계획 · 휴식"
-      : "계획 " + day.targetKm.toLocaleString("ko-KR", { maximumFractionDigits: 3 }) + " km · " + day.targetPace;
+      : "계획 " + kmLabel(day.targetKm) + " km · " + day.targetPace;
 
     var actTxt = "";
     if (rec) {
@@ -459,7 +462,7 @@
     wbar.querySelector("i").style.width = Math.min(100, pct).toFixed(1) + "%";
     wbar.setAttribute("data-state", barState(pct, finished));
     var weekHint = cur.week + "주차 · " + cur.phase + " · 세션 " + sess.done + "/" + cur.sessions + " 완료";
-    if (pre) weekHint = "11.30(월) 시작 · D-" + dayDiff(d(plan.race.startDate), today) + " · " + cur.week + "주차 · " + cur.phase;
+    if (pre) weekHint = "11.30(월) 시작 · D-" + dayDiff(d(plan.race.startDate), today) + " · " + cur.week + "주차 " + cur.phase;
     else if (post) weekHint = "16주 훈련 종료 · 서울마라톤 결과는 아래 16주차 참고";
     else weekHint += " · 남은 계획 " + fmtKm(Math.max(0, cur.targetKm - act)) + " km";
     document.getElementById("p-week-hint").textContent = weekHint;
@@ -501,20 +504,20 @@
       }
       var rec = state.byDate[day.date];
       var parts = [];
-      parts.push('<span>계획 ' + day.targetKm.toLocaleString("ko-KR", { maximumFractionDigits: 3 }) + " km · " + day.targetPace + "</span>");
+      parts.push('<span>계획 ' + kmLabel(day.targetKm) + " km · " + day.targetPace + "</span>");
       if (rec) {
         parts.push('<span class="sep">|</span><span>실제 ' + fmtKm(rec.km) + " km · " + paceText(rec.sec, rec.km) + "/km" +
           (rec.count > 1 ? " (" + rec.count + "회 합산)" : "") + "</span>");
       }
       metaEl.innerHTML = parts.join("");
       var next = nextSession(plan, day);
-      detailEl.textContent = day.detail + (next ? "  ·  다음 훈련: " + md(next.date) + "(" + DOW[d(next.date).getDay()] + ") " + next.title + (next.targetKm ? " " + fmtKm(next.targetKm) + "km" : "") : "");
+      detailEl.textContent = day.detail + (next ? "  ·  다음 훈련: " + md(next.date) + "(" + DOW[d(next.date).getDay()] + ") " + next.title : "");
     } else if (today < d(plan.race.startDate)) {
       var first = plan.weeks[0].days.filter(function (x) { return x.type !== "rest"; })[0];
       titleEl.textContent = "훈련 시작 전 — 11.30(월)부터";
       dateEl.textContent = md(tISO) + " (" + DOW[today.getDay()] + ")";
       metaEl.innerHTML = '<span>첫 세션 ' + md(first.date) + "(" + DOW[d(first.date).getDay()] + ") · " + esc(first.title) +
-        " · " + fmtKm(first.targetKm) + " km · " + first.targetPace + "</span>";
+        " · " + first.targetPace + "</span>";
       detailEl.textContent = plan.weeks[0].focus;
     } else {
       titleEl.textContent = "16주 훈련 종료";
