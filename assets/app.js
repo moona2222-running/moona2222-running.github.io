@@ -620,6 +620,10 @@
       b.addEventListener("click", function () { setView(b.getAttribute("data-view"), true); });
     });
     setView(location.hash === "#runs" ? "runs" : "plan", false);
+    window.addEventListener("hashchange", function () {
+      var v = location.hash === "#runs" ? "runs" : "plan";
+      if (v !== state.view) setView(v, false);
+    });
 
     Promise.all([runsP, planP]).then(function (res) {
       var runs = res[0], plan = res[1];
